@@ -3,18 +3,17 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\CategoryStoreRequest;
 use App\Models\Category;
-use http\Env\Response;
-use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 
 class CategoryController extends Controller
 {
-    public function getCategory()
+    public function getCategory(Request $request)
     {
-        $data = Category::query()->get();
+        $per_page = $request->get('per_page', 10);
+
+        $data = Category::query()->paginate($per_page);
 
         return response()->json([
             'status' => true,
@@ -24,7 +23,6 @@ class CategoryController extends Controller
 
     public function store(Request $request)
     {
-
         try {
             $imageName = null;
 
@@ -36,7 +34,7 @@ class CategoryController extends Controller
             Category::create([
                 'CategoryName' => $request->get('CategoryName'),
                 'CategoryImage' => $imageName ?? null,
-                'Priority' => $request->get('Priority')
+                'Priority' => $request->get('Priority') ?? null
             ]);
 
             return response()->json([
@@ -56,7 +54,6 @@ class CategoryController extends Controller
         try {
             $data = Category::query()->where('CategoryID', $request->get('CategoryID'))->first();
 
-
             if ($request->hasFile('image')) {
                 $imageName = Str::random(32) . "." . $request->file('image')->getClientOriginalExtension();
                 $request->file('image')->move(public_path('category'), $imageName);
@@ -65,7 +62,7 @@ class CategoryController extends Controller
             $data->update([
                 'CategoryName' => $request->get('CategoryName'),
                 'CategoryImage' => $request->hasFile('image') ? $imageName : $data->CategoryImage,
-                'Priority' => $request->get('Priority') ? $request->get('Priority') : $data->Priority
+                'Priority' => $request->get('Priority') ?? null
             ]);
 
             return response()->json([
@@ -83,7 +80,6 @@ class CategoryController extends Controller
     public function delete($id)
     {
         $data = Category::query()->where('CategoryID', $id)->first();
-
 
         if (!empty($data)) {
             $data->delete();
