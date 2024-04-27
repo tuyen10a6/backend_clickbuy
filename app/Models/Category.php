@@ -10,8 +10,13 @@ class Category extends Model
     use HasFactory;
 
     protected $primaryKey = 'CategoryID';
-    
-    protected  $table = 'ProductCategory';
+
+    protected $table = 'ProductCategory';
 
     protected $guarded = [];
+
+    public function product()
+    {
+        return $this->hasMany(Product::class, 'CategoryID');
+    }
 }
