@@ -28,6 +28,7 @@ Route::get('/', function () {
 Route::get('category/getAll', [CategoryController::class, 'getCategory']);
 Route::get('brand/getAll', [BrandController::class, 'getAllBrand']);
 Route::get('product/getAll', [ProductController::class, 'getAllProduct']);
+Route::get('product/getProductByCategory', [ProductController::class, 'getProductByCategory']);
 
 Route::group(['prefix' => 'auth'], function () {
     Route::post('login', [AuthController::class, 'login'])->middleware(['cors']);;

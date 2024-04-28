@@ -12,8 +12,6 @@ class ProductController extends Controller
 {
     public function getAllProduct(Request $request)
     {
-
-
         $per_page = $request->get('per_page', 10);
 
         $data = Product::query()->paginate($per_page);
@@ -26,7 +24,7 @@ class ProductController extends Controller
 
     public function getProductByCategory(Request $request)
     {
-        $per_page = $request->get('per_page', 10);
+        $per_page = $request->get('per_page', 20);
 
         $categoryID = $request->get('category_id');
 
@@ -129,4 +127,20 @@ class ProductController extends Controller
         }
     }
 
+    public function getProductByID(Request $request)
+    {
+        $data = Product::query()->where('ProductID', $request->get('id'))->first();
+
+        if (!empty($data)) {
+            return response()->json([
+                'status' => true,
+                'data' => $data
+            ], 200);
+        } else {
+            return response()->json([
+                'status' => false,
+                'message' => 'ID trên không tồn tại'
+            ], 404);
+        }
+    }
 }
