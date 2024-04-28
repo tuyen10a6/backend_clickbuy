@@ -20,7 +20,7 @@ class ProductVariantController extends Controller
         }
     }
 
-    public function getVariantByProductID(Request $request)
+    public function getVariantByID(Request $request)
     {
         $data = ProductVariant::query()->where('ProductID', $request->get('id'))->first();
 
@@ -84,7 +84,7 @@ class ProductVariantController extends Controller
                     "Capacity" => $request->has('Capacity') ? $request->get('Capacity') : $data->Capacity,
                     "PRICE" => $request->has('PRICE') ? $request->get('PRICE') : $data->PRICE,
                     "ImageVariant" => $request->hasFile('image') ? $imageVariant : $data->ImageVariant,
-                    "ProductVariantSL" => $request->has("ProductVariantSL") ? $request->get('ProductVariantSL') : $data->PRICE
+                    "ProductVariantSL" => $request->has("ProductVariantSL") ? $request->get('ProductVariantSL') : $data->ProductVariantSL
                 ]);
 
                 return response()->json([

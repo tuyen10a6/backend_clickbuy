@@ -6,6 +6,7 @@ use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\CategoryController;
 use App\Http\Controllers\Api\BrandController;
 use App\Http\Controllers\Api\ProductController;
+use App\Http\Controllers\Api\ProductVariantController;
 
 /*
 |--------------------------------------------------------------------------
@@ -29,6 +30,9 @@ Route::get('category/getAll', [CategoryController::class, 'getCategory']);
 Route::get('brand/getAll', [BrandController::class, 'getAllBrand']);
 Route::get('product/getAll', [ProductController::class, 'getAllProduct']);
 Route::get('product/getProductByCategory', [ProductController::class, 'getProductByCategory']);
+Route::get('variant/variantByProduct', [ProductVariantController::class, 'getVariantByProduct']);
+Route::get('variant/variantByID', [ProductVariantController::class, 'getVariantByID']);
+
 
 Route::group(['prefix' => 'auth'], function () {
     Route::post('login', [AuthController::class, 'login'])->middleware(['cors']);;
@@ -52,5 +56,10 @@ Route::middleware(['admin.auth', 'cors'])->group(function () {
         Route::post('/store', [ProductController::class, 'store']);
         Route::post('/update', [ProductController::class, 'update']);
         Route::delete('/delete', [ProductController::class, 'delete']);
+    });
+    Route::prefix('variant')->group(function () {
+        Route::post('/store', [ProductVariantController::class, 'store']);
+        Route::post('/update', [ProductVariantController::class, 'update']);
+        Route::delete('/delete', [ProductVariantController::class, 'delete']);
     });
 });
