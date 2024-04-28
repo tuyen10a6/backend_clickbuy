@@ -55,7 +55,7 @@ class CategoryController extends Controller
             $data = Category::query()->where('CategoryID', $request->get('CategoryID'))->first();
 
             if ($request->hasFile('image')) {
-                $imageName = Str::random(32) . "." . $request->file('image')->getClientOriginalExtension();
+                $imageName = '/category/' . Str::random(32) . "." . $request->file('image')->getClientOriginalExtension();
                 $request->file('image')->move(public_path('category'), $imageName);
             }
 

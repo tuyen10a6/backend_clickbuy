@@ -50,7 +50,7 @@ class BrandController extends Controller
             $data = Brand::query()->where('BrandID', $request->get('id'))->first();
 
             $data->update([
-                'BrandName' => $request->get('BrandName') ?? null,
+                'BrandName' => $request->get('BrandName') ? $request->get('BrandName') : $data->BrandName,
                 'Country' => $request->get('Country') ? $request->get('Country') : $data->Country,
                 'Website' => $request->get('Website') ?? null,
                 'ContactPerson' => $request->get('ContactPerson') ?? null,
