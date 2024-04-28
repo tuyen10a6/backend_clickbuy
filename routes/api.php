@@ -4,6 +4,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\CategoryController;
+use App\Http\Controllers\Api\BrandController;
 
 /*
 |--------------------------------------------------------------------------
@@ -24,6 +25,7 @@ Route::get('/', function () {
 });
 
 Route::get('category/getAll', [CategoryController::class, 'getCategory']);
+Route::get('brand/getAll', [BrandController::class, 'getAllBrand']);
 
 Route::group(['prefix' => 'auth'], function () {
     Route::post('login', [AuthController::class, 'login'])->middleware(['cors']);;
@@ -37,5 +39,10 @@ Route::middleware(['admin.auth', 'cors'])->group(function () {
         Route::post('/store', [CategoryController::class, 'store']);
         Route::post('/update', [CategoryController::class, 'update']);
         Route::delete('/delete/{id}', [CategoryController::class, 'delete']);
+    });
+    Route::prefix('brand')->group(function () {
+        Route::post('/store', [BrandController::class, 'store']);
+        Route::post('/update', [BrandController::class, 'update']);
+        Route::delete('/delete', [BrandController::class, 'delete']);
     });
 });

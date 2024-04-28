@@ -21,7 +21,7 @@ class BrandController extends Controller
         ], 200);
     }
 
-    public function addBrand(Request $request)
+    public function store(Request $request)
     {
         $validated = $request->validate([
             'BrandName' => 'required|unique:Brand|max:255',
@@ -40,18 +40,18 @@ class BrandController extends Controller
         } catch (\Exception $e) {
             return response()->json([
                 'status' => false,
-                'message' => $e->getMessage()], 401);
+                'message' => $e->getMessage()], 404);
         }
     }
 
-    public function updateBrand(Request $request)
+    public function update(Request $request)
     {
         try {
-            $data = Brand::query()->where('BrandID', $request->get('BrandID'))->first();
+            $data = Brand::query()->where('BrandID', $request->get('id'))->first();
 
             $data->update([
-                'BrandName' => $request->get('BrandName'),
-                'Country' => $request->get('Country'),
+                'BrandName' => $request->get('BrandName') ?? null,
+                'Country' => $request->get('Country') ? $request->get('Country') : $data->Country,
                 'Website' => $request->get('Website') ?? null,
                 'ContactPerson' => $request->get('ContactPerson') ?? null,
                 'ContactPhone' => $request->get('ContactPhone') ?? null,
@@ -67,12 +67,12 @@ class BrandController extends Controller
             return response()->json([
                 'status' => false,
                 'message' => $e->getMessage()
-            ]);
+            ], 404);
         }
 
     }
 
-    public function deleteBrand(Request $request)
+    public function delete(Request $request)
     {
         $data = Brand::query()->where('BrandID', $request->get('id'))->first();
 
@@ -82,12 +82,12 @@ class BrandController extends Controller
             return response()->json([
                 'status' => true,
                 'message' => 'Xoá dữ liệu thành công'
-            ]);
+            ], 200);
         } else {
             return response([
                 'status' => false,
                 'message' => 'Xoá lỗi, ID trên không tồn tại'
-            ]);
+            ], 404);
         }
     }
 }
