@@ -17,12 +17,17 @@ class Product extends Model
 
     public function categories()
     {
-        return $this->belongsTo(Product::class, 'CategoryID');
+        return $this->belongsTo(Category::class, 'CategoryID');
     }
 
     public function variant()
     {
         return $this->hasMany(ProductVariant::class, 'ProductID');
+    }
+
+    public function brands()
+    {
+        return $this->belongsTo(Brand::class, 'BrandID');
     }
 
 

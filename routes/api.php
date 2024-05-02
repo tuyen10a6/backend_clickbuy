@@ -32,15 +32,14 @@ Route::get('product/getAll', [ProductController::class, 'getAllProduct']);
 Route::get('product/getProductByCategory', [ProductController::class, 'getProductByCategory']);
 Route::get('variant/variantByProduct', [ProductVariantController::class, 'getVariantByProduct']);
 Route::get('variant/variantByID', [ProductVariantController::class, 'getVariantByID']);
-
+Route::post('/uploads', [\App\Http\Controllers\Api\UploadController::class, 'upload'])->middleware(['cors']);
 
 Route::group(['prefix' => 'auth'], function () {
-    Route::post('login', [AuthController::class, 'login'])->middleware(['cors']);;
-    Route::post('logout', [AuthController::class, 'logout'])->middleware(['cors']);;
-    Route::post('refresh', [AuthController::class, 'refresh'])->middleware(['cors']);;
+    Route::post('login', [AuthController::class, 'login'])->middleware(['cors']);
+    Route::post('logout', [AuthController::class, 'logout'])->middleware(['cors']);
+    Route::post('refresh', [AuthController::class, 'refresh'])->middleware(['cors']);
     Route::post('me', [AuthController::class, 'me']);
 });
-
 Route::middleware(['admin.auth', 'cors'])->group(function () {
     Route::prefix('category')->group(function () {
         Route::post('/store', [CategoryController::class, 'store']);

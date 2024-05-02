@@ -14,7 +14,7 @@ class ProductController extends Controller
     {
         $per_page = $request->get('per_page', 10);
 
-        $data = Product::query()->paginate($per_page);
+        $data = Product::query()->with(['categories', 'brands'])->paginate($per_page);
 
         return response()->json([
             'status' => true,
@@ -61,6 +61,7 @@ class ProductController extends Controller
                 "ImageURL" => $imageName,
                 "DateCreated" => now()->format('Y-m-d'),
                 "BrandID" => $request->get('BrandID'),
+                "DetailProduct" => $request->get('DetailProduct')
             ]);
 
             return response()->json([
