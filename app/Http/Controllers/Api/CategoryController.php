@@ -27,7 +27,7 @@ class CategoryController extends Controller
             $imageName = null;
 
             if ($request->hasFile('image')) {
-                $imageName = Str::random(32) . "." . $request->file('image')->getClientOriginalExtension();
+                $imageName = '/category/' . Str::random(32) . "." . $request->file('image')->getClientOriginalExtension();
                 $request->file('image')->move(public_path('category'), $imageName);
             }
 
@@ -62,7 +62,7 @@ class CategoryController extends Controller
             $data->update([
                 'CategoryName' => $request->get('CategoryName'),
                 'CategoryImage' => $request->hasFile('image') ? $imageName : $data->CategoryImage,
-                'Priority' => $request->get('Priority') ?? null
+                'Priority' => $request->has('Priority') ? $request->get('Priority') : $data->Priority
             ]);
 
             return response()->json([
@@ -93,5 +93,15 @@ class CategoryController extends Controller
                 'message' => `Lỗi xoá danh mục`
             ], 401);
         }
+    }
+
+    public function getCategoryByID(Request $request)
+    {
+        $data = Category::query()->where('CategoryID', $request->get('id'))->first();
+
+        return response()->json([
+            'status' => true,
+            'data' => $data
+        ], 200);
     }
 }

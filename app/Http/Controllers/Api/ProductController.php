@@ -93,7 +93,8 @@ class ProductController extends Controller
                 "CategoryID" => $request->has('CategoryID') ? $request->get('CategoryID') : $data->CategoryID,
                 "Description" => $request->has('Description') ? $request->get('Description') : $data->Description,
                 "ImageURL" => $request->hasFile('image') ? $imageName : $data->ImageURL,
-                "BrandID" => $request->has('BrandID') ? $request->get('BrandID') : $data->BrandID
+                "BrandID" => $request->has('BrandID') ? $request->get('BrandID') : $data->BrandID,
+                "DetailProduct" => $request->has('DetailProduct') ? $request->get('DetailProduct') : $data->DetailProduct,
             ]);
 
             return response()->json([

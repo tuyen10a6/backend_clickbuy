@@ -28,10 +28,13 @@ Route::get('/', function () {
 
 Route::get('category/getAll', [CategoryController::class, 'getCategory']);
 Route::get('brand/getAll', [BrandController::class, 'getAllBrand']);
+Route::get('brand/getBrandByID', [BrandController::class, 'getBrandByID']);
 Route::get('product/getAll', [ProductController::class, 'getAllProduct']);
+Route::get('product/getProductByID', [ProductController::class, 'getProductByID']);
 Route::get('product/getProductByCategory', [ProductController::class, 'getProductByCategory']);
 Route::get('variant/variantByProduct', [ProductVariantController::class, 'getVariantByProduct']);
 Route::get('variant/variantByID', [ProductVariantController::class, 'getVariantByID']);
+Route::get('getCategoryByID', [CategoryController::class, 'getCategoryByID']);
 Route::post('/uploads', [\App\Http\Controllers\Api\UploadController::class, 'upload'])->middleware(['cors']);
 
 Route::group(['prefix' => 'auth'], function () {

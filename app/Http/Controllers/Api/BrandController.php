@@ -52,10 +52,8 @@ class BrandController extends Controller
             $data->update([
                 'BrandName' => $request->get('BrandName') ? $request->get('BrandName') : $data->BrandName,
                 'Country' => $request->get('Country') ? $request->get('Country') : $data->Country,
-                'Website' => $request->get('Website') ?? null,
-                'ContactPerson' => $request->get('ContactPerson') ?? null,
-                'ContactPhone' => $request->get('ContactPhone') ?? null,
-                'CategoryID' => $request->get('CategoryID') ?? null
+                'Website' => $request->get('Website') ? $request->get('Website') : $data->Website,
+                'ContactPhone' => $request->get('ContactPhone') ? $request->get('ContactPhone') : $data->ContactPhone,
             ]);
 
             return response()->json([
@@ -87,6 +85,23 @@ class BrandController extends Controller
             return response([
                 'status' => false,
                 'message' => 'Xoá lỗi, ID trên không tồn tại'
+            ], 404);
+        }
+    }
+
+    public function getBrandByID(Request $request)
+    {
+        $data = Brand::query()->where('BrandID', $request->get('id'))->first();
+
+        if (!empty($data)) {
+            return response()->json([
+                'status' => true,
+                'data' => $data
+            ], 200);
+        } else {
+            return response([
+                'status' => false,
+                'message' => 'Brand trên không tồn tại, vui lòng xem lại'
             ], 404);
         }
     }
