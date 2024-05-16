@@ -22,9 +22,9 @@ class WareHouseController extends Controller
     {
         try {
             $data = [
-                "name" => $request->get('name'),
-                "name_another" => $request->get('name_another'),
-                "address" => $request->get('address'),
+                "ten_kho" => $request->get('ten_kho'),
+                "ten_kho2" => $request->get('ten_kho2'),
+                "dia_chi" => $request->get('dia_chi'),
                 "status" => $request->get('status')
             ];
 

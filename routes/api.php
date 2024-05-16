@@ -7,6 +7,7 @@ use App\Http\Controllers\Api\CategoryController;
 use App\Http\Controllers\Api\BrandController;
 use App\Http\Controllers\Api\ProductController;
 use App\Http\Controllers\Api\ProductVariantController;
+use App\Http\Controllers\Api\WareHouseController;
 
 /*
 |--------------------------------------------------------------------------
@@ -34,6 +35,7 @@ Route::get('product/getProductByID', [ProductController::class, 'getProductByID'
 Route::get('product/getProductByCategory', [ProductController::class, 'getProductByCategory']);
 Route::get('variant/variantByProduct', [ProductVariantController::class, 'getVariantByProduct']);
 Route::get('variant/variantByID', [ProductVariantController::class, 'getVariantByID']);
+Route::get('warehouse/getAllWareHouse', [WareHouseController::class, 'getAllWareHouse']);
 Route::get('getCategoryByID', [CategoryController::class, 'getCategoryByID']);
 Route::post('/uploads', [\App\Http\Controllers\Api\UploadController::class, 'upload'])->middleware(['cors']);
 
@@ -63,5 +65,11 @@ Route::middleware(['admin.auth', 'cors'])->group(function () {
         Route::post('/store', [ProductVariantController::class, 'store']);
         Route::post('/update', [ProductVariantController::class, 'update']);
         Route::delete('/delete', [ProductVariantController::class, 'delete']);
+    });
+
+    Route::prefix('warehouse')->group(function () {
+        Route::post('/store', [WareHouseController::class, 'addWareHouse']);
+        Route::post('/update', [WareHouseController::class, 'updateWareHouse']);
+        Route::delete('delete', [WareHouseController::class, 'deleteWareHouse']);
     });
 });

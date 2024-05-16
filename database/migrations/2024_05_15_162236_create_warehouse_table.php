@@ -17,6 +17,7 @@ return new class extends Migration
             $table->string('ten_kho2')->nullable();
             $table->string('dia_chi');
             $table->boolean('status')->default('1');
+            $table->timestamps();
         });
     }
 
