@@ -18,6 +18,18 @@ class WareHouseController extends Controller
         ], 200);
     }
 
+    public function getWareHouseByID(Request $request)
+    {
+        $data = WareHouse::query()->where('id', $request->get('id'))->first();
+
+        if (isset($data)) {
+            return response()->json([
+                'status' => true,
+                'data' => $data
+            ], 200);
+        }
+    }
+
     public function addWareHouse(Request $request)
     {
         try {

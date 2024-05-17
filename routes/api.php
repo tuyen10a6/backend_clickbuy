@@ -36,6 +36,7 @@ Route::get('product/getProductByCategory', [ProductController::class, 'getProduc
 Route::get('variant/variantByProduct', [ProductVariantController::class, 'getVariantByProduct']);
 Route::get('variant/variantByID', [ProductVariantController::class, 'getVariantByID']);
 Route::get('warehouse/getAllWareHouse', [WareHouseController::class, 'getAllWareHouse']);
+Route::get('warehouse/getWareHouseByID', [WareHouseController::class, 'getWareHouseByID']);
 Route::get('getCategoryByID', [CategoryController::class, 'getCategoryByID']);
 Route::post('/uploads', [\App\Http\Controllers\Api\UploadController::class, 'upload'])->middleware(['cors']);
 
@@ -70,6 +71,6 @@ Route::middleware(['admin.auth', 'cors'])->group(function () {
     Route::prefix('warehouse')->group(function () {
         Route::post('/store', [WareHouseController::class, 'addWareHouse']);
         Route::post('/update', [WareHouseController::class, 'updateWareHouse']);
-        Route::delete('delete', [WareHouseController::class, 'deleteWareHouse']);
+        Route::delete('/delete', [WareHouseController::class, 'deleteWareHouse']);
     });
 });
