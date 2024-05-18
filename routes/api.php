@@ -1,6 +1,5 @@
 <?php
 
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\CategoryController;
@@ -8,6 +7,7 @@ use App\Http\Controllers\Api\BrandController;
 use App\Http\Controllers\Api\ProductController;
 use App\Http\Controllers\Api\ProductVariantController;
 use App\Http\Controllers\Api\WareHouseController;
+use App\Http\Controllers\Api\WareHouseDetailsController;
 
 /*
 |--------------------------------------------------------------------------
@@ -35,8 +35,11 @@ Route::get('product/getProductByID', [ProductController::class, 'getProductByID'
 Route::get('product/getProductByCategory', [ProductController::class, 'getProductByCategory']);
 Route::get('variant/variantByProduct', [ProductVariantController::class, 'getVariantByProduct']);
 Route::get('variant/variantByID', [ProductVariantController::class, 'getVariantByID']);
+Route::get('variant/all', [ProductVariantController::class, 'getAllVariant']);
 Route::get('warehouse/getAllWareHouse', [WareHouseController::class, 'getAllWareHouse']);
 Route::get('warehouse/getWareHouseByID', [WareHouseController::class, 'getWareHouseByID']);
+Route::get('warehouseDetails/allWareHouseDetailByID', [WareHouseDetailsController::class, 'getAllWareHouseDetailsByID']);
+Route::get('warehouseDetails/getAll', [WareHouseDetailsController::class, 'getAllWareHouse']);
 Route::get('getCategoryByID', [CategoryController::class, 'getCategoryByID']);
 Route::post('/uploads', [\App\Http\Controllers\Api\UploadController::class, 'upload'])->middleware(['cors']);
 
@@ -73,4 +76,9 @@ Route::middleware(['admin.auth', 'cors'])->group(function () {
         Route::post('/update', [WareHouseController::class, 'updateWareHouse']);
         Route::delete('/delete', [WareHouseController::class, 'deleteWareHouse']);
     });
+
+    Route::prefix('wareHouseDetails')->group(function () {
+        Route::post('store', [WareHouseDetailsController::class, 'store']);
+    });
+
 });

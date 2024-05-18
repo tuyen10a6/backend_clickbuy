@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Models\Product;
 use App\Models\ProductVariant;
 use Illuminate\Http\Request;
 
@@ -132,5 +133,15 @@ class ProductVariantController extends Controller
                 "message" => 'ID trên không tồn tại'
             ], 404);
         }
+    }
+
+    public function getAllVariant()
+    {
+        $data = ProductVariant::query()->get();
+
+        return response()->json([
+            'status' => true,
+            'data' => $data
+        ], 200);
     }
 }
