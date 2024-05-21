@@ -4,7 +4,9 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Models\WareHouseDetails;
+use http\Env\Response;
 use Illuminate\Http\Request;
+use mysql_xdevapi\Exception;
 
 class WareHouseDetailsController extends Controller
 {
@@ -53,10 +55,9 @@ class WareHouseDetailsController extends Controller
 
     public function getAllWareHouseDetailsByID(Request $request)
     {
-        if(!($request->get('id') === 'all'))
-        $wareHouse = WareHouseDetails::query()->with(['wareHouse', 'variant'])->where('warehouse_id', $request->get('id'))->get();
-        else
-        {
+        if (!($request->get('id') === 'all'))
+            $wareHouse = WareHouseDetails::query()->with(['wareHouse', 'variant'])->where('warehouse_id', $request->get('id'))->get();
+        else {
             $wareHouse = WareHouseDetails::query()->with(['wareHouse', 'variant'])->get();
         }
 
@@ -69,6 +70,41 @@ class WareHouseDetailsController extends Controller
             return response()->json([
                 'status' => false,
                 'message' => 'Chưa có dữ liệu !!!'
+            ], 401);
+        }
+    }
+
+    public function getWareHouseDetailByID(Request $request)
+    {
+        $wareHouseID = $request->get('id');
+
+        $wareHouseDetail = WareHouseDetails::query()->where('id', $wareHouseID)->first();
+
+        return response()->json([
+            'status' => true,
+            'data' => $wareHouseDetail
+        ], 200);
+    }
+
+    public function updateWareHouseDetails(Request $request)
+    {
+        $wareHouseDetail = WareHouseDetails::query()->where('id', $request->get('id'))->first();
+
+        $data = $request->all();
+
+        try {
+            if (isset($data)) {
+                $wareHouseDetail->update($data);
+
+                return response()->json([
+                    'status' => true,
+                    'message' => 'Cập nhật dữ liệu thành công'
+                ], 200);
+            }
+        } catch (\Exception $e) {
+            return response()->json([
+                'status' => true,
+                'message' => $e->getMessage()
             ], 401);
         }
     }

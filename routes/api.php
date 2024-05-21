@@ -8,6 +8,7 @@ use App\Http\Controllers\Api\ProductController;
 use App\Http\Controllers\Api\ProductVariantController;
 use App\Http\Controllers\Api\WareHouseController;
 use App\Http\Controllers\Api\WareHouseDetailsController;
+use App\Http\Controllers\Api\SupplierController;
 
 /*
 |--------------------------------------------------------------------------
@@ -40,7 +41,10 @@ Route::get('warehouse/getAllWareHouse', [WareHouseController::class, 'getAllWare
 Route::get('warehouse/getWareHouseByID', [WareHouseController::class, 'getWareHouseByID']);
 Route::get('warehouseDetails/allWareHouseDetailByID', [WareHouseDetailsController::class, 'getAllWareHouseDetailsByID']);
 Route::get('warehouseDetails/getAll', [WareHouseDetailsController::class, 'getAllWareHouse']);
+Route::get('/warehouseDetail/getWareHouseDetailByID', [WareHouseDetailsController::class, 'getWareHouseDetailByID']);
 Route::get('getCategoryByID', [CategoryController::class, 'getCategoryByID']);
+Route::get('/supplier/getAll', [SupplierController::class, 'getAllSupplier']);
+Route::get('/supplier/getSupplierByID', [SupplierController::class, 'getSupplierByID']);
 Route::post('/uploads', [\App\Http\Controllers\Api\UploadController::class, 'upload'])->middleware(['cors']);
 
 Route::group(['prefix' => 'auth'], function () {
@@ -79,6 +83,12 @@ Route::middleware(['admin.auth', 'cors'])->group(function () {
 
     Route::prefix('wareHouseDetails')->group(function () {
         Route::post('store', [WareHouseDetailsController::class, 'store']);
+        Route::post('update', [WareHouseDetailsController::class, 'updateWareHouseDetails']);
+    });
+
+    Route::prefix('supplier')->group(function () {
+        Route::post('store', [SupplierController::class, 'store']);
+        Route::post('update', [SupplierController::class, 'update']);
     });
 
 });
