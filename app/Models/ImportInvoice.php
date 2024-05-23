@@ -12,4 +12,9 @@ class ImportInvoice extends Model
     protected $table = 'import_invoice';
 
     protected $guarded = [];
+
+    public function supplier()
+    {
+        return $this->belongsTo(Supplier::class, 'supplier_id');
+    }
 }

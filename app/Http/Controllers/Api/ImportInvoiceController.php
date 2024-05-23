@@ -10,7 +10,7 @@ class ImportInvoiceController extends Controller
 {
     public function getAllImportInvoice()
     {
-        $data = ImportInvoice::query()->get();
+        $data = ImportInvoice::query()->with('supplier')->get();
 
         return response()->json([
             'status' => true,
@@ -36,7 +36,6 @@ class ImportInvoiceController extends Controller
             ], 401);
         }
     }
-
 
     public function update(Request $request)
     {

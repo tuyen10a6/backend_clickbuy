@@ -9,6 +9,7 @@ use App\Http\Controllers\Api\ProductVariantController;
 use App\Http\Controllers\Api\WareHouseController;
 use App\Http\Controllers\Api\WareHouseDetailsController;
 use App\Http\Controllers\Api\SupplierController;
+use App\Http\Controllers\Api\ImportInvoiceController;
 
 /*
 |--------------------------------------------------------------------------
@@ -45,6 +46,7 @@ Route::get('/warehouseDetail/getWareHouseDetailByID', [WareHouseDetailsControlle
 Route::get('getCategoryByID', [CategoryController::class, 'getCategoryByID']);
 Route::get('/supplier/getAll', [SupplierController::class, 'getAllSupplier']);
 Route::get('/supplier/getSupplierByID', [SupplierController::class, 'getSupplierByID']);
+Route::get('/importInvoice/getAllImportInvoice', [ImportInvoiceController::class, 'getAllImportInvoice']);
 Route::post('/uploads', [\App\Http\Controllers\Api\UploadController::class, 'upload'])->middleware(['cors']);
 
 Route::group(['prefix' => 'auth'], function () {
@@ -89,6 +91,11 @@ Route::middleware(['admin.auth', 'cors'])->group(function () {
     Route::prefix('supplier')->group(function () {
         Route::post('store', [SupplierController::class, 'store']);
         Route::post('update', [SupplierController::class, 'update']);
+    });
+
+    Route::prefix('importInvoice')->group(function () {
+        Route::post('store', [ImportInvoiceController::class, 'store']);
+        Route::post('update', [ImportInvoiceController::class, 'update']);
     });
 
 });
