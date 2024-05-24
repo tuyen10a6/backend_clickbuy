@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Models\ImportInvoice;
+use App\Models\ImportInvoiceDetails;
 use Illuminate\Http\Request;
 
 class ImportInvoiceController extends Controller
@@ -35,6 +36,16 @@ class ImportInvoiceController extends Controller
                 'message' => $exception->getMessage()
             ], 401);
         }
+    }
+
+    public function getImportInvoiceDetails(Request $request)
+    {
+        $data = ImportInvoiceDetails::query()->where('id', $request->get('id'))->get();
+
+        return response()->json([
+            'status' => true,
+            'data' => $data
+        ], 200);
     }
 
     public function update(Request $request)
