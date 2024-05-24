@@ -10,7 +10,7 @@ use App\Http\Controllers\Api\WareHouseController;
 use App\Http\Controllers\Api\WareHouseDetailsController;
 use App\Http\Controllers\Api\SupplierController;
 use App\Http\Controllers\Api\ImportInvoiceController;
-
+use App\Http\Controllers\Api\ImportInvoiceDetailController;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -96,6 +96,11 @@ Route::middleware(['admin.auth', 'cors'])->group(function () {
     Route::prefix('importInvoice')->group(function () {
         Route::post('store', [ImportInvoiceController::class, 'store']);
         Route::post('update', [ImportInvoiceController::class, 'update']);
+    });
+
+    Route::prefix('importInvoiceDetail')->group(function () {
+        Route::post('store', [ImportInvoiceDetailController::class, 'store']);
+//        Route::post('update', [ImportInvoiceDetailController::class, 'update']);
     });
 
 });

@@ -17,7 +17,7 @@ return new class extends Migration
             $table->unsignedInteger('supplier_id');
             $table->foreign('supplier_id')->references('id')->on('supplier');
             $table->dateTime('date_create')->default(\Illuminate\Support\Facades\DB::raw('CURRENT_TIMESTAMP'));
-            $table->decimal('total_amount', 10,2)->nullable();
+            $table->decimal('total_amount', 20,2)->nullable();
             $table->string('status')->default('pending');
             $table->text('notes')->nullable();
             $table->timestamps();
