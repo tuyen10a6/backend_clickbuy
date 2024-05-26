@@ -11,13 +11,14 @@ class ImportInvoiceDetailController extends Controller
 {
     public function store(Request $request)
     {
-        $data = $request->all();
-
-        $quantity = $request->get('quantity');
-
-        $price = $request->get('price');
-
-        $discount = $request->get('discount');
+        $data = [
+            'quantity' => $request->get('quantity'),
+            'import_invoice_id' => $request->get('import_invoice_id'),
+            "variant_id" => $request->get('variant_id'),
+            "price" => $request->get('price'),
+            "discount" => $request->get('discount'),
+            "status" => $request->get('status')
+        ];
 
         $importInvoice = ImportInvoice::query()->where('id', $request->get('import_invoice_id'))->first();
 
@@ -26,7 +27,7 @@ class ImportInvoiceDetailController extends Controller
 
             if (!empty($importInvoice)) {
 
-                $importInvoice->total_amount += ($quantity * $price) - $discount;
+                $importInvoice->total_amount += ($data['quantity'] * $data['price']) - $data['discount'];
                 $importInvoice->update([
                     "total_amount" => $importInvoice->total_amount
                 ]);
@@ -40,7 +41,7 @@ class ImportInvoiceDetailController extends Controller
             return response()->json([
                 'status' => false,
                 'message' => $e->getMessage()
-            ], 401);
+            ], 400);
         }
     }
 }

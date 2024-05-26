@@ -40,7 +40,7 @@ class ImportInvoiceController extends Controller
 
     public function getImportInvoiceDetails(Request $request)
     {
-        $data = ImportInvoiceDetails::query()->where('id', $request->get('id'))->get();
+        $data = ImportInvoiceDetails::query()->with('productVariant')->where('import_invoice_id', $request->get('id'))->get();
 
         return response()->json([
             'status' => true,
@@ -67,7 +67,7 @@ class ImportInvoiceController extends Controller
             return response()->json([
                 'status' => false,
                 'message' => $e->getMessage()
-            ], 401);
+            ], 400);
         }
     }
 }

@@ -58,7 +58,7 @@ class SupplierController extends Controller
             return response()->json([
                 'status' => false,
                 'message' => $e->getMessage()
-            ], 401);
+            ], 400);
         }
     }
 

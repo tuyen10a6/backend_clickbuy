@@ -40,7 +40,7 @@ class BrandController extends Controller
         } catch (\Exception $e) {
             return response()->json([
                 'status' => false,
-                'message' => $e->getMessage()], 404);
+                'message' => $e->getMessage()], 400);
         }
     }
 
@@ -65,7 +65,7 @@ class BrandController extends Controller
             return response()->json([
                 'status' => false,
                 'message' => $e->getMessage()
-            ], 404);
+            ], 400);
         }
 
     }

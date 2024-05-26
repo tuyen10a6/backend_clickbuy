@@ -45,7 +45,7 @@ class CategoryController extends Controller
             return response()->json([
                 'status' => false,
                 'message' => $e->getMessage()
-            ], 401);
+            ], 400);
         }
     }
 
@@ -73,7 +73,7 @@ class CategoryController extends Controller
             return response()->json([
                 'status' => false,
                 'message' => $e->getMessage()
-            ], 401);
+            ], 400);
         }
     }
 
@@ -91,7 +91,7 @@ class CategoryController extends Controller
             return response()->json([
                 'status' => 'false',
                 'message' => `Lỗi xoá danh mục`
-            ], 401);
+            ], 400);
         }
     }
 

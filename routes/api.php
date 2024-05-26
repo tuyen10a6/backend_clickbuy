@@ -11,6 +11,7 @@ use App\Http\Controllers\Api\WareHouseDetailsController;
 use App\Http\Controllers\Api\SupplierController;
 use App\Http\Controllers\Api\ImportInvoiceController;
 use App\Http\Controllers\Api\ImportInvoiceDetailController;
+
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -47,6 +48,7 @@ Route::get('getCategoryByID', [CategoryController::class, 'getCategoryByID']);
 Route::get('/supplier/getAll', [SupplierController::class, 'getAllSupplier']);
 Route::get('/supplier/getSupplierByID', [SupplierController::class, 'getSupplierByID']);
 Route::get('/importInvoice/getAllImportInvoice', [ImportInvoiceController::class, 'getAllImportInvoice']);
+Route::get('/importInvoice/getDetails', [ImportInvoiceController::class, 'getImportInvoiceDetails']);
 Route::post('/uploads', [\App\Http\Controllers\Api\UploadController::class, 'upload'])->middleware(['cors']);
 
 Route::group(['prefix' => 'auth'], function () {

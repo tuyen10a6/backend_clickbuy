@@ -18,7 +18,7 @@ return new class extends Migration
             $table->foreign('variant_id')->references('VARRIANTID')->on('ProductVariant');
             $table->string('import_invoice_id');
             $table->foreign('import_invoice_id')->references('id')->on('import_invoice');
-            $table->decimal('price', 20, 2);
+            $table->integer('price');
             $table->integer('discount')->default(0);
             $table->boolean('status')->default('1');
             $table->timestamps();

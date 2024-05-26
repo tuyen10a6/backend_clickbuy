@@ -12,4 +12,9 @@ class ImportInvoiceDetails extends Model
     protected $table = 'import_invoice_details';
 
     protected $guarded = [];
+
+    public function productVariant()
+    {
+        return $this->belongsTo(ProductVariant::class, 'variant_id');
+    }
 }
