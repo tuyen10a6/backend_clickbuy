@@ -12,6 +12,7 @@ use App\Http\Controllers\Api\SupplierController;
 use App\Http\Controllers\Api\ImportInvoiceController;
 use App\Http\Controllers\Api\ImportInvoiceDetailController;
 use App\Http\Controllers\Api\OrderController;
+use App\Http\Controllers\Api\SlideHomeController;
 
 /*
 |--------------------------------------------------------------------------
@@ -51,6 +52,7 @@ Route::get('/supplier/getSupplierByID', [SupplierController::class, 'getSupplier
 Route::get('/importInvoice/getAllImportInvoice', [ImportInvoiceController::class, 'getAllImportInvoice']);
 Route::get('/importInvoice/getDetails', [ImportInvoiceController::class, 'getImportInvoiceDetails']);
 Route::post('order/store', [OrderController::class, 'store']);
+Route::get('slide/getAll', [SlideHomeController::class, 'getAll']);
 Route::post('/uploads', [\App\Http\Controllers\Api\UploadController::class, 'upload'])->middleware(['cors']);
 
 Route::group(['prefix' => 'auth'], function () {
@@ -107,5 +109,8 @@ Route::middleware(['admin.auth', 'cors'])->group(function () {
 //        Route::post('update', [ImportInvoiceDetailController::class, 'update']);
     });
 
-
+    Route::prefix('slide')->group(function () {
+        Route::post('store', [SlideHomeController::class, 'store']);
+        Route::post('update', [SlideHomeController::class, 'update']);
+    });
 });

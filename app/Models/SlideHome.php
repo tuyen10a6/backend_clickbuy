@@ -12,4 +12,6 @@ class SlideHome extends Model
     protected  $table = 'SLIDEHOME';
 
     protected $guarded = [];
+
+    protected $primaryKey = "SlileID";
 }
