@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Models\Brand;
 use App\Models\Product;
+use App\Models\ProductPrice;
+use App\Models\ProductVariant;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 
@@ -14,7 +16,7 @@ class ProductController extends Controller
     {
         $per_page = $request->get('per_page', 10);
 
-        $data = Product::query()->with(['categories', 'brands'])->paginate($per_page);
+        $data = Product::query()->with(['categories', 'brands', 'productPrice'])->paginate($per_page);
 
         return response()->json([
             'status' => true,
@@ -54,7 +56,7 @@ class ProductController extends Controller
                 $request->file('image')->move(public_path('product'), $imageName);
             }
 
-            Product::create([
+            $product = Product::create([
                 "ProductName" => $request->get('ProductName'),
                 "CategoryID" => $request->get('CategoryID'),
                 "Description" => $request->get('Description'),
@@ -62,6 +64,12 @@ class ProductController extends Controller
                 "DateCreated" => now()->format('Y-m-d'),
                 "BrandID" => $request->get('BrandID'),
                 "DetailProduct" => $request->get('DetailProduct')
+            ]);
+
+            ProductPrice::create([
+                "product_id" => $product["ProductID"],
+                "price" => $request->get("price"),
+                "price_discount" => $request->get("price_discount")
             ]);
 
             return response()->json([
@@ -145,4 +153,29 @@ class ProductController extends Controller
             ], 404);
         }
     }
+
+    public function getProductSale()
+    {
+        $products = Product::with(['productPrice', 'reviews'])->limit(10)->orderBy('created_at', 'desc')->get();
+
+        foreach ($products as $product) {
+            $totalStars = 0;
+            $totalReviews = $product->reviews->count();
+
+            foreach ($product->reviews as $review) {
+                $totalStars += $review->Rating;
+            }
+
+            $averageRating = $totalReviews > 0 ? $totalStars / $totalReviews : 0;
+
+            $product->averageRating = $averageRating;
+            $product->totalReviews = $totalReviews;
+        }
+
+        return response()->json([
+            'status' => true,
+            'data' => $products
+        ], 200);
+    }
+
 }

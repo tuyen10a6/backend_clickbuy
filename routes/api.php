@@ -13,6 +13,7 @@ use App\Http\Controllers\Api\ImportInvoiceController;
 use App\Http\Controllers\Api\ImportInvoiceDetailController;
 use App\Http\Controllers\Api\OrderController;
 use App\Http\Controllers\Api\SlideHomeController;
+use App\Http\Controllers\Api\ImageSaleRightHomeController;
 
 /*
 |--------------------------------------------------------------------------
@@ -38,6 +39,7 @@ Route::get('brand/getBrandByID', [BrandController::class, 'getBrandByID']);
 Route::get('product/getAll', [ProductController::class, 'getAllProduct']);
 Route::get('product/getProductByID', [ProductController::class, 'getProductByID']);
 Route::get('product/getProductByCategory', [ProductController::class, 'getProductByCategory']);
+Route::get('product/getProductNew', [ProductController::class, 'getProductSale']);
 Route::get('variant/variantByProduct', [ProductVariantController::class, 'getVariantByProduct']);
 Route::get('variant/variantByID', [ProductVariantController::class, 'getVariantByID']);
 Route::get('variant/all', [ProductVariantController::class, 'getAllVariant']);
@@ -54,6 +56,8 @@ Route::get('/importInvoice/getDetails', [ImportInvoiceController::class, 'getImp
 Route::post('order/store', [OrderController::class, 'store']);
 Route::get('slide/getAll', [SlideHomeController::class, 'getAll']);
 Route::get('slide/getDetail', [SlideHomeController::class, 'getDetailSlide']);
+Route::get('imageRightHome/getAll', [ImageSaleRightHomeController::class, 'getAll']);
+Route::get('imageRightHome/getDetail', [ImageSaleRightHomeController::class, 'getDetail']);
 Route::post('/uploads', [\App\Http\Controllers\Api\UploadController::class, 'upload'])->middleware(['cors']);
 
 Route::group(['prefix' => 'auth'], function () {
@@ -113,5 +117,10 @@ Route::middleware(['admin.auth', 'cors'])->group(function () {
     Route::prefix('slide')->group(function () {
         Route::post('store', [SlideHomeController::class, 'store']);
         Route::post('update', [SlideHomeController::class, 'update']);
+    });
+
+    Route::prefix('imageSaleRightHome')->group(function () {
+        Route::post('store', [ImageSaleRightHomeController::class, 'store']);
+        Route::post('update', [ImageSaleRightHomeController::class, 'update']);
     });
 });

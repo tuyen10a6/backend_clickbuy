@@ -30,5 +30,14 @@ class Product extends Model
         return $this->belongsTo(Brand::class, 'BrandID');
     }
 
+    public function productPrice()
+    {
+        return $this->hasOne(ProductPrice::class, 'product_id');
+    }
+
+    public function reviews()
+    {
+        return $this->hasMany(ReviewProduct::class, 'ProductID');
+    }
 
 }
