@@ -70,6 +70,8 @@ class SlideHomeController extends Controller
 
                 $data->update([
                     "Image" => $request->hasFile('Image') ? $imageName : $data->Image,
+                    "ImageURL" => $request->get('ImageURL'),
+                    "NameSlide" => $request->get('NameSlide')
                 ]);
 
                 return response()->json([
@@ -81,6 +83,22 @@ class SlideHomeController extends Controller
         } catch (\Exception $e) {
             return response()->json(['status' => false,
                 'message' => $e->getMessage()], 400);
+        }
+    }
+
+
+    public function getDetailSlide(Request $request)
+    {
+        $key = $request->get('id');
+
+        $data = SlideHome::query()->where('SlileID', $key)->first();
+
+        if($data)
+        {
+            return response()->json([
+                'status' => true,
+                'data' => $data
+            ], 200);
         }
     }
 

@@ -53,6 +53,7 @@ Route::get('/importInvoice/getAllImportInvoice', [ImportInvoiceController::class
 Route::get('/importInvoice/getDetails', [ImportInvoiceController::class, 'getImportInvoiceDetails']);
 Route::post('order/store', [OrderController::class, 'store']);
 Route::get('slide/getAll', [SlideHomeController::class, 'getAll']);
+Route::get('slide/getDetail', [SlideHomeController::class, 'getDetailSlide']);
 Route::post('/uploads', [\App\Http\Controllers\Api\UploadController::class, 'upload'])->middleware(['cors']);
 
 Route::group(['prefix' => 'auth'], function () {
