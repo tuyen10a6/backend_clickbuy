@@ -13,7 +13,7 @@ class CategoryController extends Controller
     {
         $per_page = $request->get('per_page', 10);
 
-        $data = Category::query()->paginate($per_page);
+        $data = Category::query()->with('product')->paginate($per_page);
 
         return response()->json([
             'status' => true,
