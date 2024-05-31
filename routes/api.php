@@ -58,6 +58,7 @@ Route::get('slide/getAll', [SlideHomeController::class, 'getAll']);
 Route::get('slide/getDetail', [SlideHomeController::class, 'getDetailSlide']);
 Route::get('imageRightHome/getAll', [ImageSaleRightHomeController::class, 'getAll']);
 Route::get('imageRightHome/getDetail', [ImageSaleRightHomeController::class, 'getDetail']);
+Route::get('product/search', [ProductController::class, 'searchProduct']);
 Route::post('/uploads', [\App\Http\Controllers\Api\UploadController::class, 'upload'])->middleware(['cors']);
 
 Route::group(['prefix' => 'auth'], function () {

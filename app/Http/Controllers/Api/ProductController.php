@@ -9,6 +9,7 @@ use App\Models\ProductPrice;
 use App\Models\ProductVariant;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
+use function SebastianBergmann\Type\returnType;
 
 class ProductController extends Controller
 {
@@ -28,9 +29,9 @@ class ProductController extends Controller
     {
         $per_page = $request->get('per_page', 20);
 
-        $categoryID = $request->get('category_id');
+        $categoryID = $request->get('id');
 
-        $data = Product::query()->where('CategoryID', $categoryID)->paginate($per_page);
+        $data = Product::query()->where('CategoryID', $categoryID)->with('productPrice')->paginate($per_page);
 
         if (!empty($data)) {
             return response()->json([
@@ -139,7 +140,20 @@ class ProductController extends Controller
 
     public function getProductByID(Request $request)
     {
-        $data = Product::query()->where('ProductID', $request->get('id'))->first();
+        $data = Product::query()->with('reviews')->where('ProductID', $request->get('id'))->first();
+
+        $totalStars = 0;
+        $totalReviews = $data->reviews->count();
+
+        foreach ($data->reviews as $review) {
+            $totalStars += $review->Rating;
+        }
+
+        $averageRating = $totalReviews > 0 ? $totalStars / $totalReviews : 0;
+
+        $data->averageRating = $averageRating;
+        $data->totalReviews = $totalReviews;
+
 
         if (!empty($data)) {
             return response()->json([
@@ -177,5 +191,17 @@ class ProductController extends Controller
             'data' => $products
         ], 200);
     }
+
+    public function searchProduct(Request $request)
+    {
+            $data = Product::query()->where('ProductName', 'like', '%' . $request->get('key') . '%')->with('productPrice')->get();
+
+            return response()->json([
+                'status' => true,
+                'data' => $data
+            ], 200);
+
+    }
+
 
 }

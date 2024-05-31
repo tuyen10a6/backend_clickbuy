@@ -9,15 +9,32 @@ use Illuminate\Http\Request;
 
 class CategoryController extends Controller
 {
+
     public function getCategory(Request $request)
     {
         $per_page = $request->get('per_page', 10);
 
-        $data = Category::query()->with('product')->paginate($per_page);
+        $categories = Category::query()->with(['product.productPrice', 'product.reviews'])->paginate($per_page);
+
+        foreach ($categories as $category) {
+            foreach ($category->product as $product) {
+                $totalStars = 0;
+                $totalReviews = $product->reviews->count();
+
+                foreach ($product->reviews as $review) {
+                    $totalStars += $review->Rating;
+                }
+
+                $averageRating = $totalReviews > 0 ? $totalStars / $totalReviews : 0;
+
+                $product->averageRating = $averageRating;
+                $product->totalReviews = $totalReviews;
+            }
+        }
 
         return response()->json([
             'status' => true,
-            'response' => $data
+            'response' => $categories
         ]);
     }
 
