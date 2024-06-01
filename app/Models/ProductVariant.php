@@ -14,4 +14,9 @@ class ProductVariant extends Model
     protected $primaryKey = 'VARRIANTID';
 
     protected $guarded = [];
+
+    public function orderDetail()
+    {
+        return $this->hasMany(OrderDetail::class, 'variant_id');
+    }
 }

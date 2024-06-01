@@ -20,8 +20,6 @@ class WareHouseDetailsController extends Controller
 
             $wareHouseDetails = WareHouseDetails::query()->where('variant_id', $variant)->where('warehouse_id', $wareHouse)->first();
 
-            dd($wareHouseDetails);
-
             if (empty($wareHouseDetails)) {
                 WareHouseDetails::create($data);
 

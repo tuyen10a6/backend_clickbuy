@@ -6,10 +6,14 @@ use App\Http\Controllers\Controller;
 use App\Models\Customer;
 use App\Models\Order;
 use App\Models\OrderDetail;
+use App\Models\OrderStatus;
+use App\Models\Product;
 use App\Models\ProductVariant;
+use App\Models\Reviews;
 use App\Models\WareHouseDetails;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Carbon;
 
 class OrderController extends Controller
 {
@@ -48,7 +52,7 @@ class OrderController extends Controller
 
                 if (!empty($checkQuantityWareHouse)) {
                     $dataDetail = [
-                        "order_id" => $orderSave['id'],
+                        "order_id" => $orderSave['OrderID'],
                         "variant_id" => $detail['variant_id'],
                         "quantity" => $detail['quantity'],
                         "price" => $detail["price"]
@@ -82,4 +86,153 @@ class OrderController extends Controller
             ], 400);
         }
     }
+
+    public function getAll()
+    {
+        $data = Order::query()->with(['orderDetail.productVariant', 'orderStatus', 'customer'])->get();
+
+        return response()->json([
+            'status' => true,
+            'data' => $data
+        ], 200);
+    }
+
+    public function getDetail(Request $request)
+    {
+        $data = Order::query()->with(['orderDetail.productVariant', 'orderStatus', 'customer'])->where('OrderID', $request->get('id'))->first();
+
+        return response()->json([
+            'status' => true,
+            'data' => $data
+        ], 200);
+    }
+
+    public function update(Request $request)
+    {
+        try {
+            $order = Order::query()->where('OrderID', $request->get('id'))->first();
+
+            $data = [
+                "OrderStatusID" => $request->get('status'),
+                "note_address" => $request->get('note_address')
+            ];
+
+            if ($order) {
+                $order->update($data);
+
+                return response()->json([
+                    'status' => true,
+                    'message' => 'Cập nhật dữ liệu thành công'
+                ], 200);
+            }
+        } catch (\Exception $e) {
+            return response()->json([
+                'status' => false,
+                'message' => $e->getMessage()
+            ], 400);
+        }
+    }
+
+    public function getOrderStatus()
+    {
+        $data = OrderStatus::query()->get();
+
+        return response()->json([
+            'status' => true,
+            'data' => $data
+        ], 200);
+    }
+
+    public function countOrder()
+    {
+        $data = count(Order::query()->get());
+
+        return response()->json([
+            'status' => true,
+            'data' => $data
+        ], 200);
+    }
+
+    public function totalRevenue()
+    {
+        $orders = Order::query()->where('OrderStatusID', Order::ORDER_THANHCONG)->with('orderDetail')->get();
+        $totalRevenue = 0;
+
+        foreach ($orders as $order) {
+            foreach ($order->orderDetail as $item) {
+                $totalRevenue += $item->price * $item->quantity;
+            }
+        }
+
+        return response()->json([
+            'data' => $totalRevenue
+        ], 200);
+    }
+
+    public function totalRevenueNowDate()
+    {
+        $today = Carbon::today();
+
+        $orders = Order::query()
+            ->where('OrderStatusID', Order::ORDER_THANHCONG)
+            ->whereDate('updated_at', $today)
+            ->with('orderDetail')
+            ->get();
+
+        $totalRevenue = 0;
+
+        foreach ($orders as $order) {
+            foreach ($order->orderDetail as $item) {
+                $totalRevenue += $item->price * $item->quantity;
+            }
+        }
+
+        return response()->json([
+            'data' => $totalRevenue
+        ], 200);
+    }
+
+    public function totalReview()
+    {
+        $data = count(Reviews::query()->get());
+
+        return response()->json([
+            'status' => true,
+            'data' => $data
+        ], 200);
+    }
+
+    public function getProductTopBuy()
+    {
+        $data = ProductVariant::has('orderDetail')
+            ->whereHas('orderDetail', function ($query) {
+                $query->where('quantity', '>', 0);
+            })
+            ->with(['orderDetail' => function ($query) {
+                $query->where('quantity', '>', 0);
+            }])
+            ->withCount('orderDetail as total_quantity')
+            ->get();
+
+        return response()->json([
+            'data' => $data
+        ], 200);
+    }
+
+    public function totalOrderStatus()
+    {
+        $data = OrderStatus::query()->with('getOrder')->get();
+
+        foreach ($data as $item)
+        {
+            $item->total_count = count($item->getOrder);
+        }
+
+        return response()->json([
+            'status' => true,
+            'data' => $data
+        ], 200);
+
+    }
+
 }

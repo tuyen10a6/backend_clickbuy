@@ -14,6 +14,7 @@ use App\Http\Controllers\Api\ImportInvoiceDetailController;
 use App\Http\Controllers\Api\OrderController;
 use App\Http\Controllers\Api\SlideHomeController;
 use App\Http\Controllers\Api\ImageSaleRightHomeController;
+use App\Http\Controllers\Api\CustomerController;
 
 /*
 |--------------------------------------------------------------------------
@@ -54,11 +55,22 @@ Route::get('/supplier/getSupplierByID', [SupplierController::class, 'getSupplier
 Route::get('/importInvoice/getAllImportInvoice', [ImportInvoiceController::class, 'getAllImportInvoice']);
 Route::get('/importInvoice/getDetails', [ImportInvoiceController::class, 'getImportInvoiceDetails']);
 Route::post('order/store', [OrderController::class, 'store']);
+Route::get('order/getAll', [OrderController::class, 'getAll']);
 Route::get('slide/getAll', [SlideHomeController::class, 'getAll']);
 Route::get('slide/getDetail', [SlideHomeController::class, 'getDetailSlide']);
 Route::get('imageRightHome/getAll', [ImageSaleRightHomeController::class, 'getAll']);
 Route::get('imageRightHome/getDetail', [ImageSaleRightHomeController::class, 'getDetail']);
 Route::get('product/search', [ProductController::class, 'searchProduct']);
+Route::get('customer/getAll', [CustomerController::class, 'getAll']);
+Route::get('customer/search', [CustomerController::class, 'searchProduct']);
+Route::get('order/detail', [OrderController::class, 'getDetail']);
+Route::get('order/status', [OrderController::class, 'getOrderStatus']);
+Route::get('order/count', [OrderController::class, 'countOrder']);
+Route::get('order/totalPrice', [OrderController::class, 'totalRevenue']);
+Route::get('order/totalPriceDate', [OrderController::class, 'totalRevenueNowDate']);
+Route::get('order/totalReview', [OrderController::class, 'totalReview']);
+Route::get('order/getProductTopBuy', [OrderController::class, 'getProductTopBuy']);
+Route::get('order/totalOrderStatus', [OrderController::class, 'totalOrderStatus']);
 Route::post('/uploads', [\App\Http\Controllers\Api\UploadController::class, 'upload'])->middleware(['cors']);
 
 Route::group(['prefix' => 'auth'], function () {
@@ -123,5 +135,9 @@ Route::middleware(['admin.auth', 'cors'])->group(function () {
     Route::prefix('imageSaleRightHome')->group(function () {
         Route::post('store', [ImageSaleRightHomeController::class, 'store']);
         Route::post('update', [ImageSaleRightHomeController::class, 'update']);
+    });
+
+    Route::prefix('order')->group(function () {
+        Route::post('update', [OrderController::class, 'update']);
     });
 });

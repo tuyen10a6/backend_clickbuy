@@ -12,4 +12,9 @@ class OrderDetail extends Model
     protected $table = 'order_detail';
 
     protected $guarded = [];
+
+    public function productVariant()
+    {
+        return $this->belongsTo(ProductVariant::class, 'variant');
+    }
 }

@@ -11,10 +11,28 @@ class Order extends Model
 
     protected $table = 'Orders';
 
+    protected $guarded = [];
 
-    protected  $guarded = [];
-
+    protected $primaryKey = 'OrderID';
 
     CONST ORDER_CHUAXACNHAN = 1;
+
+    CONST ORDER_THANHCONG = 8;
+
+    public function orderDetail()
+    {
+        return $this->hasMany(OrderDetail::class, 'order_id');
+    }
+
+    public function orderStatus()
+    {
+        return $this->belongsTo(OrderStatus::class, 'OrderStatusID');
+    }
+
+    public function customer()
+    {
+        return $this->belongsTo(Customer::class, 'CustomerID');
+    }
+
 
 }

@@ -15,7 +15,7 @@ class ProductController extends Controller
 {
     public function getAllProduct(Request $request)
     {
-        $per_page = $request->get('per_page', 10);
+        $per_page = $request->get('per_page', 100);
 
         $data = Product::query()->with(['categories', 'brands', 'productPrice'])->paginate($per_page);
 

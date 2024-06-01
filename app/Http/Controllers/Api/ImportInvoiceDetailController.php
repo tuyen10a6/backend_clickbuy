@@ -30,8 +30,6 @@ class ImportInvoiceDetailController extends Controller
 
         $wareHouseDetail = WareHouseDetails::query()->where('warehouse_id', $request->get('warehouse_id'))->first();
 
-        dd($wareHouseDetail);
-
         try {
             DB::beginTransaction();
 
