@@ -3,17 +3,19 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Mail\OrderHistoryMail;
+use App\Mail\OrderSuccessMail;
 use App\Models\Customer;
 use App\Models\Order;
 use App\Models\OrderDetail;
 use App\Models\OrderStatus;
-use App\Models\Product;
 use App\Models\ProductVariant;
 use App\Models\Reviews;
 use App\Models\WareHouseDetails;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Mail;
 
 class OrderController extends Controller
 {
@@ -27,6 +29,7 @@ class OrderController extends Controller
 
             $dataCustomer = Customer::query()->where('CustomerPhone', $customerPhone)->first();
 
+            $customer = [];
             if (empty($dataCustomer)) {
                 $customer = Customer::query()->create($data['customer'][0]);
             }
@@ -49,7 +52,6 @@ class OrderController extends Controller
                     ->where("variant_id", $detail['variant_id'])
                     ->where("quantity", ">=", $detail['quantity'])->first();
 
-
                 if (!empty($checkQuantityWareHouse)) {
                     $dataDetail = [
                         "order_id" => $orderSave['OrderID'],
@@ -71,7 +73,10 @@ class OrderController extends Controller
                 }
             }
 
+            Mail::to($dataCustomer->CustomerEmail ?? $customer['CustomerEmail'])->send(new OrderSuccessMail($orderSave));
+
             DB::commit();
+
             return response()->json([
                 'status' => true,
                 "message" => "Thêm giỏ hàng thành công"
@@ -223,8 +228,7 @@ class OrderController extends Controller
     {
         $data = OrderStatus::query()->with('getOrder')->get();
 
-        foreach ($data as $item)
-        {
+        foreach ($data as $item) {
             $item->total_count = count($item->getOrder);
         }
 
@@ -233,6 +237,36 @@ class OrderController extends Controller
             'data' => $data
         ], 200);
 
+    }
+
+    public function searchOrderHistory(Request $request)
+    {
+        try {
+            $keyOrder = $request->get('id');
+
+            $email = $request->get('email');
+
+            $data = Order::query()->with(['orderDetail.productVariant', 'customer', 'orderStatus'])->where('OrderID', $keyOrder)->first();
+
+            if (!empty($data)) {
+                Mail::to($email)->send(new OrderHistoryMail($data));
+            } else {
+                return response()->json([
+                    'status' => false,
+                    'message' => 'Đơn hàng trên không tồn tại'
+                ], 422);
+            }
+
+            return response()->json([
+                'status' => true,
+                'message' => 'Gửi email thành công'
+            ], 200);
+        } catch (\Exception $e) {
+            return response()->json([
+                'status' => false,
+                'message' => $e->getMessage()
+            ], 422);
+        }
     }
 
 }

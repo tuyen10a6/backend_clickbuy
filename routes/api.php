@@ -71,6 +71,7 @@ Route::get('order/totalPriceDate', [OrderController::class, 'totalRevenueNowDate
 Route::get('order/totalReview', [OrderController::class, 'totalReview']);
 Route::get('order/getProductTopBuy', [OrderController::class, 'getProductTopBuy']);
 Route::get('order/totalOrderStatus', [OrderController::class, 'totalOrderStatus']);
+Route::get('order/historyOrder', [OrderController::class, 'searchOrderHistory']);
 Route::post('/uploads', [\App\Http\Controllers\Api\UploadController::class, 'upload'])->middleware(['cors']);
 
 Route::group(['prefix' => 'auth'], function () {
