@@ -64,7 +64,18 @@ class ProductController extends Controller
                 "ImageURL" => $imageName,
                 "DateCreated" => now()->format('Y-m-d'),
                 "BrandID" => $request->get('BrandID'),
-                "DetailProduct" => $request->get('DetailProduct')
+                "DetailProduct" => $request->get('DetailProduct'),
+                "he_dieu_hanh" => $request->get('he_dieu_hanh') ?? null,
+                "bo_nho_trong" => $request->get('bo_nho_trong') ?? null,
+                "ram" => $request->get('ram') ?? null,
+                "camera_chinh" => $request->get('camera_chinh') ?? null,
+                "man_hinh" => $request->get('man_hinh') ?? null,
+                "kich_thuoc" => $request->get('kich_thuoc') ?? null,
+                "trong_luong" => $request->get('trong_luong') ?? null,
+                "do_phan_giai" => $request->get('do_phan_giai') ?? null,
+                "camera_phu" => $request->get('camera_phu') ?? null,
+                "mau_sac" => $request->get('mau_sac') ?? null,
+                "dung_luong_pin" => $request->get('dung_luong_pin')
             ]);
 
             ProductPrice::create([
@@ -194,12 +205,12 @@ class ProductController extends Controller
 
     public function searchProduct(Request $request)
     {
-            $data = Product::query()->where('ProductName', 'like', '%' . $request->get('key') . '%')->with('productPrice')->get();
+        $data = Product::query()->where('ProductName', 'like', '%' . $request->get('key') . '%')->with(['categories', 'brands', 'productPrice'])->get();
 
-            return response()->json([
-                'status' => true,
-                'data' => $data
-            ], 200);
+        return response()->json([
+            'status' => true,
+            'data' => $data
+        ], 200);
 
     }
 

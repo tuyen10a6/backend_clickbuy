@@ -67,5 +67,8 @@ class Kernel extends HttpKernel
         'verified' => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
         'admin.auth' => AdminAuth::class,
         'cors' => \App\Http\Middleware\Cors::class,
+        'api' => [
+            'throttle:60,1',
+        ],
     ];
 }
