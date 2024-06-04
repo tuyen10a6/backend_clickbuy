@@ -28,7 +28,7 @@ class ImportInvoiceDetailController extends Controller
 
         $importInvoice = ImportInvoice::query()->where('id', $request->get('import_invoice_id'))->first();
 
-        $wareHouseDetail = WareHouseDetails::query()->where('warehouse_id', $request->get('warehouse_id'))->first();
+        $wareHouseDetail = WareHouseDetails::query()->where('warehouse_id', $request->get('warehouse_id'))->where('variant_id', $request->get('variant_id'))->first();
 
         try {
             DB::beginTransaction();
