@@ -13,10 +13,14 @@ class ImportInvoice extends Model
 
     protected $guarded = [];
 
+    CONST COMPLETE = 1;
+
 //    protected  $primaryKey = false;
 
     public function supplier()
     {
         return $this->belongsTo(Supplier::class, 'supplier_id');
     }
+
+
 }

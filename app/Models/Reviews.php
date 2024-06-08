@@ -14,4 +14,14 @@ class Reviews extends Model
     protected $guarded = [];
 
     protected $primaryKey = 'ReviewID';
+
+    public function product()
+    {
+        return $this->belongsTo(Product::class, 'ProductID');
+    }
+
+    public function customer()
+    {
+        return $this->belongsTo(Customer::class, 'CustomerID');
+    }
 }

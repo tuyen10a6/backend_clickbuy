@@ -50,13 +50,24 @@ class ImportInvoiceController extends Controller
 
     public function update(Request $request)
     {
-        try {
-            $importInvoice = ImportInvoice::query()->where('id', $request->get('id'))->first();
 
-            $data = $request->all();
+        try {
+            $key  = $request->get('id');
+            $importInvoice = ImportInvoice::query()->where('id', $key)->first();
+
 
             if (!empty($importInvoice)) {
-                $importInvoice->update($data);
+                $importInvoiceDetail = ImportInvoiceDetails::query()->where('import_invoice_id', $key)->get();
+
+                foreach ($importInvoiceDetail as $item)
+                {
+                    $item->update([
+                        'status' => 1
+                    ]);
+                }
+                $importInvoice->update([
+                    'status' => ImportInvoice::COMPLETE
+                ]);
 
                 return response()->json([
                     'status' => true,

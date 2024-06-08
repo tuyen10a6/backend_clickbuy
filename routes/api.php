@@ -15,7 +15,7 @@ use App\Http\Controllers\Api\OrderController;
 use App\Http\Controllers\Api\SlideHomeController;
 use App\Http\Controllers\Api\ImageSaleRightHomeController;
 use App\Http\Controllers\Api\CustomerController;
-
+use App\Http\Controllers\Api\ReviewController;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -72,6 +72,10 @@ Route::get('order/totalReview', [OrderController::class, 'totalReview']);
 Route::get('order/getProductTopBuy', [OrderController::class, 'getProductTopBuy']);
 Route::get('order/totalOrderStatus', [OrderController::class, 'totalOrderStatus']);
 Route::get('order/historyOrder', [OrderController::class, 'searchOrderHistory']);
+Route::get('review/getAll', [ReviewController::class, 'getAll']);
+Route::get('review/getReviewByProduct', [ReviewController::class, 'getCommentByProduct']);
+Route::post('review/addReview', [ReviewController::class, 'addComment']);
+Route::get('review/searchProduct', [ReviewController::class, 'searchByProductName']);
 Route::post('/uploads', [\App\Http\Controllers\Api\UploadController::class, 'upload'])->middleware(['cors']);
 
 Route::group(['prefix' => 'auth'], function () {
@@ -140,5 +144,8 @@ Route::middleware(['admin.auth', 'cors'])->group(function () {
 
     Route::prefix('order')->group(function () {
         Route::post('update', [OrderController::class, 'update']);
+    });
+    Route::prefix('review')->group(function () {
+            Route::post('update', [ReviewController::class, 'update']);
     });
 });

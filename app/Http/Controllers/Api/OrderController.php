@@ -24,7 +24,6 @@ class OrderController extends Controller
         try {
             DB::beginTransaction();
             $data = $request->all();
-
             $customerPhone = ($data['customer'][0]['CustomerPhone']);
 
             $dataCustomer = Customer::query()->where('CustomerPhone', $customerPhone)->first();
@@ -68,7 +67,7 @@ class OrderController extends Controller
                 } else {
                     return response()->json([
                         "status" => false,
-                        "message" => 'Số lượng sản phẩm ' . $dataVariant['VARRIANNAME'] . " đã hết số lượng"
+                        "message" => $dataVariant['VARRIANNAME'] . " đã hết hàng."
                     ], 200);
                 }
             }
@@ -79,7 +78,7 @@ class OrderController extends Controller
 
             return response()->json([
                 'status' => true,
-                "message" => "Thêm giỏ hàng thành công"
+                "message" => "Thêm đơn hàng thành công"
             ], 200);
 
         } catch (\Exception $e) {
