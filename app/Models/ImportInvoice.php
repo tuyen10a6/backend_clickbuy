@@ -22,5 +22,10 @@ class ImportInvoice extends Model
         return $this->belongsTo(Supplier::class, 'supplier_id');
     }
 
+    public function importInvoiceDetails()
+    {
+        return $this->hasMany(ImportInvoiceDetails::class, 'import_invoice_id');
+    }
+
 
 }

@@ -11,7 +11,7 @@ class ImportInvoiceController extends Controller
 {
     public function getAllImportInvoice()
     {
-        $data = ImportInvoice::query()->with('supplier')->get();
+        $data = ImportInvoice::query()->with(['supplier', 'importInvoiceDetails.productVariant'])->get();
 
         return response()->json([
             'status' => true,
