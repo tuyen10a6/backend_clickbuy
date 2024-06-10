@@ -245,7 +245,10 @@ class OrderController extends Controller
 
             $email = $request->get('email');
 
-            $data = Order::query()->with(['orderDetail.productVariant', 'customer', 'orderStatus'])->where('OrderID', $keyOrder)->first();
+            $data = Order::query()
+                ->with(['orderDetail.productVariant', 'customer', 'orderStatus'])
+                ->where('OrderID', $keyOrder)
+                ->first();
 
             if (!empty($data)) {
                 Mail::to($email)->send(new OrderHistoryMail($data));

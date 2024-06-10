@@ -16,6 +16,10 @@ use App\Http\Controllers\Api\SlideHomeController;
 use App\Http\Controllers\Api\ImageSaleRightHomeController;
 use App\Http\Controllers\Api\CustomerController;
 use App\Http\Controllers\Api\ReviewController;
+use App\Http\Controllers\Api\EventMarketingController;
+use App\Http\Controllers\Api\EventMarketingDetailController;
+
+
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -76,6 +80,8 @@ Route::get('review/getAll', [ReviewController::class, 'getAll']);
 Route::get('review/getReviewByProduct', [ReviewController::class, 'getCommentByProduct']);
 Route::post('review/addReview', [ReviewController::class, 'addComment']);
 Route::get('review/searchProduct', [ReviewController::class, 'searchByProductName']);
+Route::get('eventMarketing/getAll', [EventMarketingController::class, 'getEventMarketing']);
+Route::get('eventMarketingDetail/getAll', [EventMarketingDetailController::class, 'getEventMarketingDetail']);
 Route::post('/uploads', [\App\Http\Controllers\Api\UploadController::class, 'upload'])->middleware(['cors']);
 
 Route::group(['prefix' => 'auth'], function () {
@@ -146,6 +152,15 @@ Route::middleware(['admin.auth', 'cors'])->group(function () {
         Route::post('update', [OrderController::class, 'update']);
     });
     Route::prefix('review')->group(function () {
-            Route::post('update', [ReviewController::class, 'update']);
+        Route::post('update', [ReviewController::class, 'update']);
+    });
+    Route::prefix('eventMarketing')->group(function () {
+        Route::post('store', [EventMarketingController::class, 'store']);
+        Route::post('update', [EventMarketingController::class, 'update']);
+    });
+
+    Route::prefix('eventMarketingDetail')->group(function () {
+           Route::post('store', [EventMarketingDetailController::class, 'store']);
+           Route::post('update', [EventMarketingDetailController::class, 'update']);
     });
 });
