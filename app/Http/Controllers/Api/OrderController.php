@@ -147,6 +147,30 @@ class OrderController extends Controller
         ], 200);
     }
 
+    public function getOrderByStatus(Request $request)
+    {
+        $key = $request->get('id');
+
+        if ($key == 'all') {
+            $data = Order::query()
+                ->with(['orderDetail.productVariant', 'orderStatus', 'customer'])
+                ->get();
+            return response()->json([
+                'status' => true,
+                'data' => $data
+            ], 200);
+        } else {
+            $data = Order::query()
+                ->with(['orderDetail.productVariant', 'orderStatus', 'customer'])
+                ->where('OrderStatusID', $key)
+                ->get();
+            return response()->json([
+                'status' => true,
+                'data' => $data
+            ], 200);
+        }
+    }
+
     public function countOrder()
     {
         $data = count(Order::query()->get());

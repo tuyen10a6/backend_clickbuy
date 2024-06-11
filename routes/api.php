@@ -81,7 +81,12 @@ Route::get('review/getReviewByProduct', [ReviewController::class, 'getCommentByP
 Route::post('review/addReview', [ReviewController::class, 'addComment']);
 Route::get('review/searchProduct', [ReviewController::class, 'searchByProductName']);
 Route::get('eventMarketing/getAll', [EventMarketingController::class, 'getEventMarketing']);
+Route::get('eventMarketing/detail', [EventMarketingController::class, 'getDetail']);
+Route::get('eventMarketingDetail/detail', [EventMarketingDetailController::class, 'getDetail']);
 Route::get('eventMarketingDetail/getAll', [EventMarketingDetailController::class, 'getEventMarketingDetail']);
+Route::get('categories/searchProduct', [ProductController::class, 'searchProductByCategories']);
+Route::get('product/searchPrice', [ProductController::class, 'searchPrice']);
+Route::get('order/orderByStatus', [OrderController::class, 'getOrderByStatus']);
 Route::post('/uploads', [\App\Http\Controllers\Api\UploadController::class, 'upload'])->middleware(['cors']);
 
 Route::group(['prefix' => 'auth'], function () {

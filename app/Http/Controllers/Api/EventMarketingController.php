@@ -18,6 +18,18 @@ class EventMarketingController extends Controller
         ], 200);
     }
 
+    public function getDetail(Request $request)
+    {
+        $key = $request->get('id');
+
+        $data = EventMarketing::query()->where('id', $key)->first();
+
+        return response()->json([
+            'status' => true,
+            'data' => $data
+        ], 200);
+    }
+
     public function store(Request $request)
     {
         $data = [

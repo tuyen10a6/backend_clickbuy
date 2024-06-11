@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Models\EventMarketingDetail;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use function PHPUnit\Framework\status;
 
@@ -11,7 +12,8 @@ class EventMarketingDetailController extends Controller
 {
     public function getEventMarketingDetail()
     {
-        $data = EventMarketingDetail::query()->get();
+        $data = EventMarketingDetail::query()->with('eventMarketing')->get();
+
 
         return response()->json([
             'status' => true,
@@ -82,5 +84,24 @@ class EventMarketingDetailController extends Controller
                 'message' => $e->getMessage()
             ], 422);
         }
+    }
+
+    public function getDetail(Request $request)
+    {
+        $key = $request->get('id');
+
+        $data = EventMarketingDetail::query()->where('id', $key)->first();
+
+        if ($data) {
+            $dateStart = new Carbon($data->date_start);
+            $dateEnd = new Carbon($data->date_end);
+            $data->date_start = $dateStart->format('Y-m-d');
+            $data->date_end = $dateEnd->format('Y-m-d');
+        }
+
+        return response()->json([
+            'status' => true,
+            'data' => $data
+        ], 200);
     }
 }

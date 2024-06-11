@@ -3,13 +3,12 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\Models\Brand;
 use App\Models\Product;
 use App\Models\ProductPrice;
-use App\Models\ProductVariant;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
-use function SebastianBergmann\Type\returnType;
+use function PHPUnit\Framework\status;
+use function Termwind\ValueObjects\p;
 
 class ProductController extends Controller
 {
@@ -214,5 +213,50 @@ class ProductController extends Controller
 
     }
 
+    public function searchProductByCategories(Request $request)
+    {
+        $keyQuery = $request->get('key');
+
+        $keyID = $request->get('id');
+
+        $data = Product::query()
+            ->where('CategoryID', $keyID)
+            ->with('productPrice')
+            ->join('product_price', 'Product.ProductID', '=', 'product_price.product_id')
+            ->orderBy('product_price.price_discount', $keyQuery)
+            ->select('Product.*')->get();
+
+        return response()->json([
+            "status" => true,
+            'data' => $data
+        ], 200);
+    }
+
+    public function searchPrice(Request $request)
+    {
+        $key = $request->get('id');
+
+        $minPrice = $request->get('min_price');
+        $maxPrice = $request->get('max_price');
+
+        $data = Product::query()->with('productPrice')
+            ->where('CategoryID', $key)
+            ->join('product_price as pp', 'Product.ProductID', '=', 'pp.product_id')
+            ->where(function ($query) use ($minPrice, $maxPrice) {
+                if ($minPrice !== null) {
+                    $query->where('pp.price_discount', '>=', $minPrice);
+                }
+                if ($maxPrice !== null) {
+                    $query->where('pp.price_discount', '<=', $maxPrice);
+                }
+            })
+            ->select('Product.*')
+            ->get();
+
+        return response()->json([
+            "status" => true,
+            'data' => $data
+        ], 200);
+    }
 
 }
